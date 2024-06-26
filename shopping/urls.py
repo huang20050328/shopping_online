@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.shortcuts import render, redirect, HttpResponse
+from app01 import models
+
+def index(request):
+    models.user_info.objects.create()
+    return HttpResponse("添加成功")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', index)
 ]
