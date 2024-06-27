@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+
+
+<style type="text/css">
+    input::placeholder {
+        color: aliceblue;
+    }
+
+    #div2 button{
+        rotate: 60deg;
+        transform-origin: 70px 0px;
+        transition: 0.3s;
+    }
+    #div2 button:hover{
+    rotate: 70deg;
+    }
+</style>
+<body background="/static/img/R-C.png"
+      style="background-repeat: no-repeat;
+      background-size: auto">
+<div><img src="/static/img/loginmodule.png" width="500" style="position: absolute; margin-left:1100px; margin-top: -10px">
+<form method="post" action="/login/verifying/">
+        {% csrf_token %}
+        <input style="background-color: transparent; border: none; color: aliceblue; outline: none; position: relative; margin-left: 1165px;margin-top: 157px; width: 370px; height: 20px; font-size: 18px" type="text" name="user" placeholder="请输入用户名" ><br>
+        <input style="background-color: transparent; border: none; color: aliceblue; outline: none; position: relative; margin-left: 1165px;margin-top: 117px; width: 370px; height: 20px; font-size: 18px" type="password" name="pwd" placeholder="请输入密码"><br>
+        <button style="background-color: transparent; border: none; position:absolute; margin-left: 1100px; margin-top: 50px" type="submit"> <img src="/static/img/loginbutton.png" width="480px" style="rotate: 3deg"></button>
+</form></div>
+
+<div id="div2"><form method="post" action="/registration/">
+        {% csrf_token %}
+        <button style="background-color: transparent; border: none; position:absolute; margin-left: 1100px; margin-top: 133px" type="submit"> <img src="/static/img/registrationbutton.png" width="480px" ></button>
+    </form></div>
+
+
+</body>
+</html>
