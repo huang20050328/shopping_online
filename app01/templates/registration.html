@@ -4,16 +4,64 @@
     <meta charset="UTF-8">
     <title>注册页面</title>
 </head>
+
+<style type="text/css">
+     @keyframes inout {
+        0%{
+            opacity: 0;
+        }
+        30%{
+            opacity: 80%;
+        }
+        70%{
+            opacity: 80%;
+        }
+        100%{
+            opacity: 0;
+        }
+        }
+    
+    #span1{
+        animation: inout 2.2s;
+        border: 20px solid;
+        border-color: aliceblue;
+        border-radius: 20px;
+        font-size: 25px;
+        color: #1c1c1c;
+        background-color: aliceblue;
+        color: #f64141;
+        opacity: 0;
+        position: absolute;
+        top: 45%;
+        left: 45%;
+    }
+    
+#div1 button{
+         width: 480px;
+         transform-origin: right bottom;
+         transition: 0.3s;
+    }
+    #div1 button:hover{
+        transform: scale(1.025);
+    }    
+</style>
+
 <body background="/static/img/R-C.png"
       style="background-repeat: no-repeat;
       background-size: auto">
 
 </body>
-<div><img src="/static/img/loginmodule.png" width="500" style="position: absolute; margin-left:1100px; margin-top: -10px">
-<form method="post" action="/login/verifying/">
+<div id="div1"><img src="/static/img/loginmodule.png" width="500" style="position: absolute; margin-left:1100px; margin-top: -10px">
+    <img src="/static/img/SelectorScreen_WoodSign1_33.png" width="510" style="position: absolute; margin-left:1100px; margin-top: 357px">
+<form method="post" action="/registration/verifying/">
         {% csrf_token %}
         <input style="background-color: transparent; border: none; color: aliceblue; outline: none; position: relative; margin-left: 1165px;margin-top: 157px; width: 370px; height: 20px; font-size: 18px" type="text" name="user" placeholder="请输入用户名" ><br>
         <input style="background-color: transparent; border: none; color: aliceblue; outline: none; position: relative; margin-left: 1165px;margin-top: 117px; width: 370px; height: 20px; font-size: 18px" type="password" name="pwd" placeholder="请输入密码"><br>
-        <button style="background-color: transparent; border: none; position:absolute; margin-left: 1100px; margin-top: 50px" type="submit"> <img src="/static/img/loginbutton.png" width="480px" style="rotate: 3deg"></button>
+        <input style="background-color: transparent; border: none; color: aliceblue; outline: none; position: relative; margin-left: 1165px;margin-top: 117px; width: 370px; height: 20px; font-size: 18px" type="password" name="conpwd" placeholder="请再次输入密码"><br>
+        <button style="background-color: transparent; border: none; position:absolute; margin-left: 1100px; margin-top: 48px" type="submit"> <img src="/static/img/registrationbutton(green).png" width="480px" style="rotate: 3deg"></button>
 </form></div>
+{% if msg != none %}
+	<span id="span1">{{ msg }}</span>
+{% endif %} 
+
 </html>
