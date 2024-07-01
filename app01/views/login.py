@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, HttpResponse
 from app01.models import user_info
 import hashlib
 import re
+import jwt
+import datetime
 
 def Encode(a):
     md = hashlib.md5(a.encode())
@@ -68,14 +70,23 @@ def login(request):
     return render(request, 'login.html')
 
 def verifying(request):
-    pass
+    if request.method == "GET":
+        return render(request, "login.html")
+    username = request.POST['user']
+    password = request.POST['pwd']
+    user = user_info.objects.filter(username=username)
+    if True:
+        if password == user.password:
+            pass
+    return render(request, 'login.html', {'msg':"用户名或密码错误", 'user': username, 'pwd': password})
+
 
 def registration(request):
-    return render(request, 'registration.html')
+    return render(request, 'registration.html', {'user': "", 'pwd': ""})
 
 def registration_verifying(request):
     if request.method == "GET":
-        return render(request, "registration.html")
+        return render(request, "registration.html", {'user': "", 'pwd': ""})
     username = request.POST['user']
     password = request.POST['pwd']
     conpassword = request.POST['conpwd']
@@ -89,9 +100,9 @@ def registration_verifying(request):
                 user_info.objects.filter(id=id).update(name="用户" + str(id), username=username, password=Encode(password))
                 return render(request, 'login.html', {'msg': '注册成功'})
             else:
-                return render(request, 'registration.html', {'msg': "两次密码不匹配"})
+                return render(request, 'registration.html', {'msg': "两次密码不匹配", 'user': username, 'pwd': password})
         else:
-            return render(request, 'registration.html', {'msg': b})
+            return render(request, 'registration.html', {'msg': b, 'user': username, 'pwd': password})
 
     else:
-        return render(request, 'registration.html', {'msg': a})
+        return render(request, 'registration.html', {'msg': a, 'user': username, 'pwd': password})
