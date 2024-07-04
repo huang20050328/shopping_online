@@ -1,9 +1,23 @@
 from django.shortcuts import render, redirect, HttpResponse
 from app01.models import user_info
+from app01.views import mainmenu
 import hashlib
 import re
 import jwt
 import datetime
+import requests
+from django.http import JsonResponse
+
+def get_token(username):
+    SECRET_KEY = 'jianguolanglang'
+
+    payload = {
+        'user_name': username,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=20)
+    }
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return token
 
 def Encode(a):
     md = hashlib.md5(a.encode())
@@ -74,11 +88,14 @@ def verifying(request):
         return render(request, "login.html")
     username = request.POST['user']
     password = request.POST['pwd']
-    user = user_info.objects.filter(username=username)
-    if True:
-        if password == user.password:
-            pass
-    return render(request, 'login.html', {'msg':"用户名或密码错误", 'user': username, 'pwd': password})
+
+    user = user_info.objects.filter(username=username).first()
+    if user != None:
+        if Encode(password) == user.password:
+            token = get_token(username)
+            str_token = str(token, encoding='utf-8')
+            return JsonResponse({"code":0, "token": str_token})
+    return JsonResponse({"code":1 , "msg":"用户名或密码错误", "user": username, "pwd": password})
 
 
 def registration(request):
@@ -106,3 +123,4 @@ def registration_verifying(request):
 
     else:
         return render(request, 'registration.html', {'msg': a, 'user': username, 'pwd': password})
+

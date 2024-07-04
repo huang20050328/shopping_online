@@ -19,6 +19,8 @@ from django.urls import path
 from django.shortcuts import render, redirect, HttpResponse
 from app01 import models
 from app01.views import login
+from app01.views import mainmenu
+
 
 
 def index(request):
@@ -28,9 +30,9 @@ def index(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', index),
+    path('', mainmenu.mainmenu),
     path('registration/', login.registration),
     path('registration/verifying/', login.registration_verifying),
     path('login/', login.login),
-    path('login/verifying', login.verifying)
+    path('login/verifying/', login.verifying)
 ]
