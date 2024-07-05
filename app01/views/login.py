@@ -124,3 +124,9 @@ def registration_verifying(request):
     else:
         return render(request, 'registration.html', {'msg': a, 'user': username, 'pwd': password})
 
+def change_pwd(request):
+    pass
+
+def change_pwd_verifying(request):
+    pass
+

@@ -40,7 +40,7 @@
         background-color: aliceblue;
         display: none;
         {#visibility: hidden;#}
-        {#opacity: 0;#}
+        opacity: 0.8;
         position: absolute;
         top: 40%;
         left: 50%;
@@ -103,20 +103,11 @@
             success: function (res) {
                 if (res.code == 0) {
                     localStorage.setItem("token", res.token)
-                    $.ajax({
-                        type: 'get',
-                        url: 'http://localhost:8000/',
-                        headers: {
-                    'Authorization': localStorage.getItem('token')
-                },
-                        success: function (){
-                            location.href="http://localhost:8000/"
-                        }
-                    })
+                    window.location.href="http://localhost:8000/"
                 }
                 else{
                     $("#span1").fadeIn(1000)
-                    $("#span1").fadeOut(1000)
+                    $("#span1").delay(1000).fadeOut(1000)
                 }
                
             },
