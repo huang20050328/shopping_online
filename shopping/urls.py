@@ -26,6 +26,10 @@ from app01.views import category_page
 from app01.views import pay_page
 from app01.views import order
 from app01.views import user_page
+from django.conf.urls.static import static
+from django.conf import settings
+from django.urls import include, path
+from app01.views import add_user_image
 
 
 
@@ -65,4 +69,6 @@ urlpatterns = [
     path('user/info/', user_page.user_info),
     path('user/update/', user_page.info_update),
     path('user/delete/', user_page.delete_user),
-]
+    path('add_user_image/', add_user_image.add_user_image, name='add_user_image'),
+    path('upload_handle/', add_user_image.upload_handle, name='upload_handle'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
