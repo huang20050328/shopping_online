@@ -7,7 +7,7 @@ class user_info(models.Model):
     password = models.CharField(max_length=200)
     balance = models.IntegerField(default=0)
     identity = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='images/', default='/static/img/default_image.png')
+    image = models.TextField(default="default.jpg")
     sex = models.IntegerField(default=0)
     phonenum = models.IntegerField(null=True)
 
@@ -27,7 +27,7 @@ class store_info(models.Model):
 class goods_info(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='images/', default='/static/img/good_default_image.png')
+    image = models.TextField(default="default.jpg")
     type = models.IntegerField()
     price = models.IntegerField()
     topic = models.CharField(max_length=50)

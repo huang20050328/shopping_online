@@ -103,6 +103,7 @@
             success: function (res) {
                 if (res.code == 0) {
                     localStorage.setItem("token", res.token)
+                    {#console.log( localStorage.getItem("token"))#}
                     window.location.href="http://localhost:8000/"
                 }
                 else{

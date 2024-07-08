@@ -71,4 +71,5 @@ urlpatterns = [
     path('user/delete/', user_page.delete_user),
     path('add_user_image/', add_user_image.add_user_image, name='add_user_image'),
     path('upload_handle/', add_user_image.upload_handle, name='upload_handle'),
+    path('show_avatar/', add_user_image.show_avatar, name='show_avatar'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

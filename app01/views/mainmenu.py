@@ -10,18 +10,26 @@ from app01.views import login
 import requests
 from django.http import JsonResponse
 import random
+import os
+from django.conf import settings
+from utils import app_jwt
 
-
+@app_jwt.decorator_login_require
 def state(request):
-    try:
-        token = request.META.get("HTTP_AUTHORIZATION")
-        decoded_payload = jwt.decode(token, 'jianguolanglang', algorithms=['HS256'])
-        user = user_info.objects.filter(username=decoded_payload['user_name']).first()
-        return JsonResponse({'code': 0, 'user_id': user.id})
-    except jwt.ExpiredSignatureError:
-        return JsonResponse({'code': 1})
-    except jwt.InvalidTokenError:
-        return JsonResponse({'code': 1})
+        return JsonResponse({'code': 0, 'user_id': request.user.id})
+
+# """
+#     首页验证用户登录状态，并获取用户id
+#     """
+#     try:
+#         token = request.META.get("HTTP_AUTHORIZATION")
+#         decoded_payload = jwt.decode(token, 'jianguolanglang', algorithms=['HS256'])
+#         user = user_info.objects.filter(username=decoded_payload['user_name']).first()
+#         return JsonResponse({'code': 0, 'user_id': user.id})
+#     except jwt.ExpiredSignatureError:
+#         return JsonResponse({'code': 1})
+#     except jwt.InvalidTokenError:
+#         return JsonResponse({'code': 1})
 
 
 def mainmenu(request):
@@ -33,11 +41,16 @@ def good_list(request):
     首页商品列表接口
     """
     query = goods_info.objects.all()
-    data = [dict(model_to_dict(i), **{
-        'image': 111
-    }) for i in query]
-    print(data)
-    return JsonResponse(data,)
+    good_list = []
+    for i in query:
+        good_info = model_to_dict(i)
+        good_info['image'] = os.path.join(settings.MEDIA_URL, 'img', i.image)
+        good_list.append(good_info)
+
+    # data = [dict(model_to_dict(i)
+    # ) for i in query]
+    # print(data)
+    return JsonResponse(good_list, safe=False)
     # Rng = goods_info.objects.last()
     # rng = Rng.id
     # i = 0

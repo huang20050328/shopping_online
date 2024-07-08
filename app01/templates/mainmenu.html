@@ -7,27 +7,35 @@
 <body>
 <h1>商城首页</h1>
 <span id="state"></span> <span id="user"></span>
+<div>{{ good_list }}</div>
+{#<img src="{{good_list[0]}}"/>#}
 <script src="/static/jQuery.js" type="text/javascript" charset="UTF-8"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        var token = localStorage.getItem(token)
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:8000/state/',
-            headers: {
-                'Authorization': localStorage.getItem('token')
-            },
-            success: function (res){
-                if(res.code == 0 ){
-                    $("#state").html("登录成功")
-                    $("#user").html(res.user_id)
-                }else{
-                    $("#state").html("未登录")
+        var token = localStorage.getItem("token")
+        {#console.log(token)#}
+        if (token) {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:8000/state/',
+                headers: {
+                    'Authorization': token
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        $("#state").html("登录成功")
+                        $("#user").html(res.user_id)
+                    } else {
+                        $("#state").html("未登录")
+                    }
+
+
                 }
-                
-                
-            }
-        })
+            })
+        }else{
+            $("#state").html("未登录1")
+        }
+        
         
     })
 </script>
