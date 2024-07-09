@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from app01.models import user_info
+from app01.models import UserInfo
 import jwt
 from rest_framework_jwt.settings import api_settings
 
@@ -45,7 +45,7 @@ def decorator_login_require(func):
         if authorization:
             payload = jwt_decode_handler(authorization)
             user_id = payload['user_id']
-            user = user_info.objects.filter(id=user_id).first()  # 解密后查询
+            user = UserInfo.objects.filter(id=user_id).first()  # 解密后查询
             if user:
                 request.user = user
                 return func(request, *args, **kwargs)

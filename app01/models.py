@@ -1,6 +1,7 @@
 from django.db import models
 
-class user_info(models.Model):
+
+class UserInfo(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=20)
@@ -15,16 +16,17 @@ class user_info(models.Model):
         db_table = 'user_info'
 
 
-class store_info(models.Model):
+class StoreInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(user_info, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     phonenum = models.IntegerField()
 
     class Meta:
         db_table = 'store_info'
 
-class goods_info(models.Model):
+
+class GoodsInfo(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     image = models.TextField(default="default.jpg")
@@ -33,41 +35,49 @@ class goods_info(models.Model):
     topic = models.CharField(max_length=50)
     detail = models.CharField(max_length=200)
     inventory = models.IntegerField()
-    store = models.ForeignKey(store_info, on_delete=models.CASCADE)
+    store = models.ForeignKey(StoreInfo, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'goods_info'
 
-class cart_info(models.Model):
+
+class CartInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    good = models.ForeignKey(goods_info, on_delete=models.CASCADE)
-    user =models.ForeignKey("user_info",on_delete=models.CASCADE)
+    good = models.ForeignKey(GoodsInfo, on_delete=models.CASCADE)
+    user = models.ForeignKey("UserInfo", on_delete=models.CASCADE)
     count = models.IntegerField()
 
     class Meta:
         db_table = 'cart_info'
 
-class order_info(models.Model):
+
+class OrderInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    good_id = models.IntegerField
-    user_id = models.IntegerField
+    good_id = models.IntegerField(null=True)
+    user_id = models.IntegerField(null=True)
+    user_name = models.CharField(max_length=100, null=True)
     user_address = models.CharField(max_length=100)
-    user_phone = models.IntegerField()
+    user_phone = models.IntegerField(null=True)
     good_name = models.CharField(max_length=100)
-    good_image = models.ImageField(upload_to='images/')
+    good_image = models.TextField(max_length=200, null=True)
     good_price = models.IntegerField()
     count = models.IntegerField()
-    state = models.IntegerField()
-    price = models.IntegerField()
-    way = models.IntegerField()
-    reason = models.CharField(max_length=200)
+    state = models.IntegerField(default=0)  # 0为已完成 1为订单取消 2为售后申请中
+    price = models.IntegerField(null=True)
+    way = models.IntegerField(null=True)
+    reason = models.CharField(max_length=200, null=True)
+    time_buy = models.DateTimeField(auto_now_add=True, null=True)
+    time_apply = models.DateTimeField(null=True)
+    time_refund = models.DateTimeField(null=True)
 
     class Meta:
         db_table = 'order_info'
 
-class address_info(models.Model):
+
+class AddressInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(user_info, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     address = models.CharField(max_length=100)
+
     class Meta:
         db_table = 'address_info'

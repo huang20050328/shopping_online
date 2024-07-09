@@ -1,29 +1,25 @@
-import json
-
 from django.forms import model_to_dict
-from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect, get_object_or_404
-from app01.models import user_info
-from app01.models import goods_info
-import jwt
-import datetime
-from app01.views import login
-import requests
+from django.shortcuts import render
+from app01.models import GoodsInfo
+
 from django.http import JsonResponse
-import random
 import os
 from django.conf import settings
 from utils import app_jwt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 @app_jwt.decorator_login_require
 def state(request):
-        return JsonResponse({'code': 0, 'user_id': request.user.id})
+    return JsonResponse({'code': 0, 'user_id': request.user.id})
+
 
 # """
 #     首页验证用户登录状态，并获取用户id
 #     """
 #     try:
 #         token = request.META.get("HTTP_AUTHORIZATION")
-#         decoded_payload = jwt.decode(token, 'jianguolanglang', algorithms=['HS256'])
+#         decoded_payload = jwt.decode(token, 'jian_guo_lang_lang', algorithms=['HS256'])
 #         user = user_info.objects.filter(username=decoded_payload['user_name']).first()
 #         return JsonResponse({'code': 0, 'user_id': user.id})
 #     except jwt.ExpiredSignatureError:
@@ -32,39 +28,34 @@ def state(request):
 #         return JsonResponse({'code': 1})
 
 
-def mainmenu(request):
-    return render(request, 'mainmenu.html')
+def main_menu(request):
+    return render(request, 'main_menu.html')
 
 
 def good_list(request):
     """
     首页商品列表接口
     """
-    query = goods_info.objects.all()
-    good_list = []
-    for i in query:
-        good_info = model_to_dict(i)
-        good_info['image'] = os.path.join(settings.MEDIA_URL, 'img', i.image)
-        good_list.append(good_info)
+    page = request.GET.get('page', 1)
+    query = GoodsInfo.objects.all()
+    paginator = Paginator(query, 20)
 
-    # data = [dict(model_to_dict(i)
-    # ) for i in query]
-    # print(data)
-    return JsonResponse(good_list, safe=False)
-    # Rng = goods_info.objects.last()
-    # rng = Rng.id
-    # i = 0
-    # list = []
-    # List = ()
-    #
-    # while i <= 20:
-    #     goodid = random.randint(1,rng)
-    #     good = goods_info.objects.get(id=goodid)
-    #     if good != None:
-    #         try:
-    #             List.__add__(goodid)
-    #             list.__add__({'good_id':good.id, 'good_name':good.name, 'good_topic':good.topic, 'good_price':good.price, 'good_image':good.image, 'store_name':good.store.name})
-    #             i = i + 1
-    #         except:
-    #             pass
-    # return JsonResponse({'good1': list[0], 'good2': list[1], 'good3': list[2], 'good4': list[3], 'good5': list[4], 'good6': list[5], 'good7': list[6], 'good8': list[7], 'good9': list[8], 'good10': list[9], 'good11': list[10], 'good12': list[11], 'good13': list[12], 'good14': list[13], 'good15': list[14], 'good16': list[15], 'good17': list[16], 'good18': list[17], 'good19': list[18], 'good20': list[19]})
+    try:
+        current_page = paginator.page(page)
+    except PageNotAnInteger:
+        current_page = paginator.page(1)
+    except EmptyPage:
+        current_page = paginator.page(1)
+
+    good_lst = [dict(model_to_dict(i), **{'image': os.path.join(settings.MEDIA_URL, 'img', i.image)}) for i in
+                query]
+
+    response_data = {
+        'goods': good_lst,
+        'current_page': current_page.number,
+        'total_pages': paginator.num_pages,
+        'has_next': current_page.has_next(),
+        'has_previous': current_page.has_previous()
+    }
+
+    return JsonResponse(response_data, safe=False)

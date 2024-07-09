@@ -1,6 +1,40 @@
+import os
+
+from django.conf import settings
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.forms import model_to_dict
+from django.http import JsonResponse
+from django.shortcuts import render
+
+from app01.models import GoodsInfo
+from utils import pagination
+
+
 def category_page(request):
-    pass
+    return render(request, 'category_page.html')
+
 
 def good_list(request):
-    pass
+    good_type = request.GET.get('type')
+    good_lst = GoodsInfo.objects.filter(type=good_type).all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(good_lst, 20)
+    try:
+        current_page = paginator.page(page)
+    except PageNotAnInteger:
+        current_page = paginator.page(1)
+    except EmptyPage:
+        current_page = paginator.page(1)
 
+    good_lst = [dict(model_to_dict(i), **{'image': os.path.join(settings.MEDIA_URL, 'img', i.image)}) for i in
+                good_lst]
+
+    response_data = {
+        'goods': good_lst,
+        'current_page': current_page.number,
+        'total_pages': paginator.num_pages,
+        'has_next': current_page.has_next(),
+        'has_previous': current_page.has_previous()
+    }
+
+    return JsonResponse(response_data, safe=False)

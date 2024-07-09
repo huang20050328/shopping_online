@@ -72,7 +72,7 @@
       justify-content:center">
 
 
-	<span id=span1>用户名或密码错误</span>
+	<span id=span1>{{ msg }}</span>
 
 
 <div id="div1"><img src="/static/img/loginmodule.png" width="500" style="position: absolute; margin-left:1100px; margin-top: -10px">
@@ -88,6 +88,10 @@
 
 <script src="/static/jQuery.js" type="text/javascript" charset="UTF-8"></script>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $("#span1").fadeIn(1000)
+        $("#span1").delay(1000).fadeOut(1000)
+    })
     document.querySelector('#b_login').onclick=function (){
         let username = document.querySelector('#user').value
         let password = document.querySelector('#pwd').value
@@ -107,6 +111,7 @@
                     window.location.href="http://localhost:8000/"
                 }
                 else{
+                    $("#span1").html("用户名或密码错误")
                     $("#span1").fadeIn(1000)
                     $("#span1").delay(1000).fadeOut(1000)
                 }

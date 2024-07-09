@@ -1,6 +1,6 @@
 from utils.uploads import getNewName
 import os
-from app01.models import user_info
+from app01.models import UserInfo
 from django.conf import settings
 from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect, get_object_or_404
 
@@ -26,13 +26,13 @@ def upload_handle(request):
             f.write(i)
 
     # 上传文件名称到数据库
-    user_info.objects.filter(name='用户1').update(image=new_name)
+    UserInfo.objects.filter(name='用户1').update(image=new_name)
     # 返回的httpresponse
     return HttpResponse('ok')
 
 
 def show_avatar(request):
-    user = user_info.objects.filter(name='用户1')[0]
+    user = UserInfo.objects.filter(name='用户1')[0]
     avatarName = str(user.image)
     # avatarUrl = '%s/users/%s' % (settings.MEDIA_URL, avatarName) # 另一种写法
     avatarUrl = os.path.join(settings.MEDIA_URL, 'img', avatarName)

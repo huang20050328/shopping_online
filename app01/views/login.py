@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from app01.models import user_info
+from app01.models import UserInfo
 from app01.views import mainmenu
 import hashlib
 import re
@@ -63,10 +63,10 @@ def username_rule(text):
     if not result3:
         return '用户名至少包含一个字母'
 
-    if user_info.objects.filter(username=text).exists():
+    if UserInfo.objects.filter(username=text).exists():
         return '用户名已存在'
 
-    return True
+    return False
 
 
 def password_rule(text):
@@ -114,7 +114,7 @@ def verifying(request):
     username = request.POST['user']
     password = request.POST['pwd']
 
-    user = user_info.objects.filter(username=username).first()
+    user = UserInfo.objects.filter(username=username).first()
     if user:
         if Encode(password) == user.password:
             user_id = user.id
@@ -141,15 +141,15 @@ def registration_verifying(request):
     password = request.POST['pwd']
     con_password = request.POST['conpwd']
     a = username_rule(username)
-    if a:
+    if not a:
         b = password_rule(password)
         if b:
             if con_password == password:
-                user_info.objects.create()
-                id = user_info.objects.last().id
-                user_info.objects.filter(id=id).update(name="用户" + str(id), username=username,
-                                                       password=Encode(password))
-                return render(request, 'login.html', {'msg': '注册成功'})
+                UserInfo.objects.create()
+                id = UserInfo.objects.last().id
+                UserInfo.objects.filter(id=id).update(name="用户" + str(id), username=username,
+                                                      password=Encode(password))
+                return render(request, 'login.html', {'code': 2, 'msg': '注册成功'})
             else:
                 return render(request, 'registration.html',
                               {'msg': "两次密码不匹配", 'user': username, 'pwd': password})
