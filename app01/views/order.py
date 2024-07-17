@@ -35,6 +35,6 @@ def refund_apply(request):
         order_id = request.POST.get('order_id')
         way = request.POST.get('way')
         reason = request.POST.get('reason')
-        OrderInfo.objects.filter(id=order_id).update(way=way, reason=reason, state=1, time_cancel=timezone.now())
+        OrderInfo.objects.filter(id=order_id).update(way=way, reason=reason, state=1, time_apply=timezone.now())
         return HttpResponse('售后申请成功')
     return JsonResponse({'code': 1})

@@ -33,6 +33,6 @@ def good_list(request):
     首页商品列表接口
     """
     page = request.GET.get('page', 1)
-    response_data = pagination.paginate(page, None)
+    response_data = pagination.paginate(page, None, None, 0)
 
     return JsonResponse(response_data, safe=False)
