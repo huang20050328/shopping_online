@@ -81,10 +81,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'online_shopping',
-        'USER': 'hyf.dg',
-        'PASSWORD': 'HyF#dG#20240701#qq',
-        'HOST': '192.168.31.12',
-        'PORT': '33066',
+        'USER': 'root',
+        'PASSWORD': 'huang20050328',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
