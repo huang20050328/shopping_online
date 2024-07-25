@@ -1,12 +1,13 @@
 import os
 
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 from app01.models import CartInfo
 from shopping import settings
 from utils import app_jwt, pagination
+from django.http import QueryDict
 
 
 @app_jwt.decorator_login_require
@@ -28,7 +29,15 @@ def cart_list(request):
 
 
 def cart_remove(request):
-    pass
+    # cart_id = request.DELETE.get('cart_id')
+    params = QueryDict(request.body)
+    print(params)
+
+    # 此时params 就是一个python字典
+    cart_id = params.get("cart_id")
+    print(cart_id)
+    CartInfo.objects.filter(id=cart_id).delete()
+    return HttpResponse("移除成功")
 
 
 def cart_update(request):
